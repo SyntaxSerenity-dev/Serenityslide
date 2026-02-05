@@ -1,0 +1,616 @@
+/**
+ * ╔═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╗
+ * ║                                                                                                                   ║
+ * ║  ███████╗██╗   ██╗███╗   ██╗████████╗ █████╗ ██╗  ██╗███████╗█████╗██████╗ █████╗███╗   ██╗██╗████████╗██╗   ██╗  ║
+ * ║  ██╔════╝╚██╗ ██╔╝████╗  ██║╚══██╔══╝██╔══██╗╚██╗██╔╝██╔════╝██╔══╝██╔══██╗██╔══╝████╗  ██║██║╚══██╔══╝╚██╗ ██╔╝  ║
+ * ║  ███████╗ ╚████╔╝ ██╔██╗ ██║   ██║   ███████║ ╚███╔╝ ███████╗█████╗██████╔╝█████╗██╔██╗ ██║██║   ██║    ╚████╔╝   ║
+ * ║  ╚════██║  ╚██╔╝  ██║╚██╗██║   ██║   ██╔══██║ ██╔██╗ ╚════██║██╔══╝██╔══██╗██╔══╝██║╚██╗██║██║   ██║     ╚██╔╝    ║
+ * ║  ███████║   ██║   ██║ ╚████║   ██║   ██║  ██║██╔╝ ██╗███████║█████╗██║  ██║█████╗██║ ╚████║██║   ██║      ██║     ║
+ * ║  ╚══════╝   ╚═╝   ╚═╝  ╚═══╝   ╚═╝   ╚═╝  ╚═╝╚═╝  ╚═╝╚══════╝╚════╝╚═╝  ╚═╝╚════╝╚═╝  ╚═══╝╚═╝   ╚═╝      ╚═╝     ║
+ * ║                                R E L I A B I L I T Y   I N   E V E R Y   L I N E                                  ║
+ * ║                                              O F   C O D E                                                        ║
+ * ║                                                                                                                   ║
+ * ╚═══════════════════════════════════════════════════════════════════════════════════════════════════════════════════╝
+ *
+ * Stylesheet: serenitySlide
+ *
+ * DESCRIPTION:
+ *   Folha de estilos complementar para a biblioteca SerenitySlide.
+ *   Fornece estilização profissional e responsiva para todos os componentes visuais do slideshow,
+ *   incluindo containers, slides, controles de navegação (setas e dots), efeitos de transição,
+ *   estados de hover/active, e suporte completo para diferentes breakpoints responsivos.
+ *   Utiliza glassmorphism (backdrop-filter) para efeitos modernos nos controles de navegação.
+ *
+ * DESIGN PATTERN:
+ *   - BEM-like Methodology: Nomenclatura de classes estruturada (.serenity-slide-wrapper, .serenity-arrow, etc.)
+ *   - Mobile-First Approach: Media queries progressivas de mobile para desktop
+ *   - Glassmorphism UI: Efeitos de blur e transparência nos controles
+ *
+ * FEATURES:
+ *   - Container fullscreen (100vh) com overflow hidden para slideshow limpo
+ *   - Slides com posicionamento absoluto e transições suaves (800ms cubic-bezier)
+ *   - Setas de navegação com glassmorphism, hover effects e feedback visual
+ *   - Dots de navegação com container glass e indicadores animados
+ *   - Suporte para múltiplos efeitos: fade, scale, rotate, cube
+ *   - Responsividade completa: desktop (1024px+), tablet (768px), mobile (480px)
+ *   - Estados de carregamento com spinner animado
+ *   - Animações auxiliares (@keyframes) para transições customizadas
+ *   - Utilities: no-select, dragging, loading
+ *
+ * DEPENDENCIES:
+ *   - CSS3 Transforms e Transitions
+ *   - CSS3 Backdrop Filter (glassmorphism)
+ *   - Prefixos vendor para Safari (-webkit-backdrop-filter)
+ *
+ * REQUIREMENTS:
+ *   - Navegadores com suporte a CSS3 (Chrome 60+, Firefox 60+, Safari 12+, Edge 79+)
+ *   - Backdrop-filter requer Chrome 76+, Safari 9+
+ *
+ * @package       frontend/components/styles
+ * @category      UI Styles / Slideshow
+ * @version       1.0.0
+ * @since         2025-02-05
+ * @license       Proprietary
+ * @company       SerenityDev
+ * @development   company: syntax serenity
+ * @email         fs.developerfullstack@gmail.com
+ * @link          https://www.syntaxserenity.co.ao
+*/
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   CONTAINER PRINCIPAL
+   
+   PURPOSE: Elemento wrapper que contém todo o slideshow
+   
+   DESCRIPTION:
+   - Define dimensões fullscreen (100vh) para ocupar toda a viewport
+   - Position relative para permitir posicionamento absoluto dos slides filhos
+   - Overflow hidden para esconder slides fora da área visível
+   
+   USAGE: Aplicado automaticamente pela biblioteca JavaScript ao container
+═══════════════════════════════════════════════════════════════════════════════ */
+ .serenity-slide-wrapper {
+     position: relative;
+     width: 100%;
+     height: 100vh;
+     overflow: hidden;
+ }   
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   SLIDES
+   
+   PURPOSE: Elementos individuais do slideshow (imagens, conteúdo)
+   
+   DESCRIPTION:
+   - Posicionamento absoluto para permitir sobreposição e transições
+   - Opacity 0 e visibility hidden como estado inicial (escondido)
+   - Transition suave (800ms) com easing cubic-bezier para movimento natural
+   - !important em position para sobrescrever estilos inline quando necessário
+   
+   USAGE: Aplicar classe .serenity-slide-item a cada slide
+═══════════════════════════════════════════════════════════════════════════════ */
+ .serenity-slide-item {
+     position: absolute !important;
+     top: 0;
+     left: 0;
+     width: 100%;
+     height: 100%;
+     opacity: 0;
+     visibility: hidden;
+     transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+ }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   SLIDE ATIVO
+   
+   PURPOSE: Estado visual do slide atualmente visível
+   
+   DESCRIPTION:
+   - Opacity 1 e visibility visible para tornar o slide visível
+   - Z-index 2 para garantir que fique acima de slides inativos
+   
+   USAGE: Classe aplicada automaticamente pela biblioteca ao slide atual
+═══════════════════════════════════════════════════════════════════════════════ */
+ .serenity-slide-item.serenity-active {
+     opacity: 1;
+     visibility: visible;
+     z-index: 2;
+ }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   SETAS DE NAVEGAÇÃO
+   
+   PURPOSE: Botões prev/next para navegação manual entre slides
+   
+   DESCRIPTION:
+   - Posicionamento absoluto centralizado verticalmente (top: 50%, translateY: -50%)
+   - Glassmorphism: rgba backgrounds + backdrop-filter blur para efeito glass
+   - Dimensões fixas 50x50px com padding e border-radius 50% para forma circular
+   - Transições suaves em todos os estados (hover, active)
+   - Z-index 100 para ficar acima de slides e outros elementos
+   - Flexbox para centralizar ícone Font Awesome perfeitamente
+   
+   BROWSER SUPPORT:
+   - backdrop-filter: Chrome 76+, Safari 9+ (com prefixo -webkit-)
+   
+   USAGE: Criados automaticamente pela biblioteca em setupContainer()
+═══════════════════════════════════════════════════════════════════════════════ */
+ .serenity-arrow {
+     position: absolute;
+     top: 50%;
+     transform: translateY(-50%);
+     background: rgba(255, 255, 255, 0.1);
+     border: 2px solid rgba(255, 255, 255, 0.2);
+     color: white;
+     padding: 1rem 1.2rem;
+     border-radius: 50%;
+     cursor: pointer;
+     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+     z-index: 100;
+     backdrop-filter: blur(10px);
+     -webkit-backdrop-filter: blur(10px);
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     font-size: 1.2rem;
+     width: 50px;
+     height: 50px;
+ }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   HOVER STATE - SETAS
+   
+   PURPOSE: Feedback visual ao passar mouse sobre setas
+   
+   DESCRIPTION:
+   - Aumenta opacidade do background e border para maior contraste
+   - Scale 1.1 para efeito de "crescimento" sutil
+   - Transform combina translateY (manter centralização) + scale
+═══════════════════════════════════════════════════════════════════════════════ */
+ .serenity-arrow:hover {
+     background: rgba(255, 255, 255, 0.2);
+     border-color: rgba(255, 255, 255, 0.4);
+     transform: translateY(-50%) scale(1.1);
+ }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   ACTIVE STATE - SETAS
+   
+   PURPOSE: Feedback visual ao clicar na seta
+   
+   DESCRIPTION:
+   - Scale 0.95 para efeito de "pressionamento"
+   - Mantém translateY para centralização vertical
+═══════════════════════════════════════════════════════════════════════════════ */
+ .serenity-arrow:active {transform: translateY(-50%) scale(0.95);}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   POSICIONAMENTO - SETA ANTERIOR
+   
+   PURPOSE: Posicionar seta prev no lado esquerdo
+   
+   DESCRIPTION:
+   - Left 2rem para margem confortável da borda
+═══════════════════════════════════════════════════════════════════════════════ */
+ .serenity-arrow-prev {left: 2rem;}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   POSICIONAMENTO - SETA PRÓXIMA
+   
+   PURPOSE: Posicionar seta next no lado direito
+   
+   DESCRIPTION:
+   - Right 2rem para margem confortável da borda
+═══════════════════════════════════════════════════════════════════════════════ */
+ .serenity-arrow-next {right: 2rem;}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   CONTAINER DE DOTS
+   
+   PURPOSE: Wrapper para indicadores de navegação (dots)
+   
+   DESCRIPTION:
+   - Posicionamento absoluto centralizado horizontalmente (left: 50%, translateX: -50%)
+   - Bottom 2rem para ficar acima da borda inferior
+   - Flexbox com gap 1rem para espaçamento uniforme entre dots
+   - Glassmorphism: background rgba + backdrop-filter blur
+   - Border-radius 50px para formato pill
+   - Z-index 100 para ficar acima de slides
+   
+   USAGE: Criado automaticamente pela biblioteca em createDots()
+═══════════════════════════════════════════════════════════════════════════════ */
+ .serenity-dots {
+     position: absolute;
+     bottom: 2rem;
+     left: 50%;
+     transform: translateX(-50%);
+     display: flex;
+     gap: 1rem;
+     z-index: 100;
+     padding: 0.5rem 1rem;
+     background: rgba(0, 0, 0, 0.2);
+     border-radius: 50px;
+     backdrop-filter: blur(10px);
+     -webkit-backdrop-filter: blur(10px);
+ }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   DOTS INDIVIDUAIS
+   
+   PURPOSE: Indicadores visuais individuais para cada slide
+   
+   DESCRIPTION:
+   - Dimensões 12x12px com border-radius 50% para forma circular
+   - Background semi-transparente como estado inativo
+   - Cursor pointer para indicar interatividade
+   - Transition suave para hover e active states
+   - Border transparente reserva espaço para estado ativo
+   
+   USAGE: Criados automaticamente pela biblioteca, um para cada slide
+═══════════════════════════════════════════════════════════════════════════════ */
+ .serenity-dot {
+     width: 12px;
+     height: 12px;
+     border-radius: 50%;
+     background: rgba(255, 255, 255, 0.4);
+     cursor: pointer;
+     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+     border: 2px solid transparent;
+ }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   HOVER STATE - DOT
+   
+   PURPOSE: Feedback visual ao passar mouse sobre dot
+   
+   DESCRIPTION:
+   - Aumenta opacidade do background para maior visibilidade
+   - Scale 1.2 para indicar interatividade
+═══════════════════════════════════════════════════════════════════════════════ */
+ .serenity-dot:hover {
+     background: rgba(255, 255, 255, 0.6);
+     transform: scale(1.2);
+ }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   ACTIVE STATE - DOT
+   
+   PURPOSE: Indicador visual do slide atualmente ativo
+   
+   DESCRIPTION:
+   - Background branco opaco para máximo contraste
+   - Scale 1.3 para destacar entre dots inativos
+   - Border semi-transparente para efeito de halo/glow
+   
+   USAGE: Classe aplicada automaticamente ao dot do slide atual
+═══════════════════════════════════════════════════════════════════════════════ */
+ .serenity-dot.serenity-dot-active {
+     background: white;
+     transform: scale(1.3);
+     border-color: rgba(255, 255, 255, 0.3);
+ }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   EFEITO FADE - OVERRIDE
+   
+   PURPOSE: Remove transforms para efeito fade puro
+   
+   DESCRIPTION:
+   - Transform none para garantir que apenas opacity mude
+   - !important para sobrescrever transforms inline aplicados por JS
+   
+   USAGE: Aplicar quando effect='fade' está configurado
+ ═══════════════════════════════════════════════════════════════════════════════ */
+ .serenity-effect-fade .serenity-slide-item {transform: none !important;}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   EFEITO SCALE - ORIGIN
+   
+   PURPOSE: Define ponto de origem para transformação scale
+   
+   DESCRIPTION:
+   - Transform-origin center center para que escala aconteça do centro
+   
+   USAGE: Aplicar quando effect='scale' está configurado
+═══════════════════════════════════════════════════════════════════════════════ */
+ .serenity-effect-scale .serenity-slide-item {transform-origin: center center;}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   EFEITO ROTATE - 3D SETUP
+   
+   PURPOSE: Configura perspectiva para rotações 3D
+   
+   DESCRIPTION:
+   - Transform-origin center center para rotação do centro
+   - Perspective 1000px para profundidade visual da rotação
+   
+   USAGE: Aplicar quando effect='rotate' está configurado
+═══════════════════════════════════════════════════════════════════════════════ */
+ .serenity-effect-rotate .serenity-slide-item {
+     transform-origin: center center;
+     perspective: 1000px;
+ }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   EFEITO CUBE - 3D SETUP
+   
+   PURPOSE: Configura perspectiva para efeito cubo 3D
+   
+   DESCRIPTION:
+   - Transform-origin center center para rotação/translação do centro
+   - Perspective 1200px para maior profundidade (cubo mais dramático)
+   - Transform-style preserve-3d essencial para manter transformações 3D dos filhos
+   
+   USAGE: Aplicar quando effect='cube' está configurado
+═══════════════════════════════════════════════════════════════════════════════ */
+ .serenity-effect-cube .serenity-slide-item {
+     transform-origin: center center;
+     perspective: 1200px;
+     transform-style: preserve-3d;
+ }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   RESPONSIVIDADE - TABLET (max-width: 1024px)
+   
+   PURPOSE: Ajustes para telas de tablet e abaixo
+   
+   DESCRIPTION:
+   - Reduz tamanho das setas (45x45px) para não ocupar muito espaço
+   - Reduz padding e font-size das setas proporcionalmente
+   - Aproxima setas das bordas (1rem ao invés de 2rem)
+   - Ajusta posição dos dots ligeiramente mais próximo da borda
+   
+   BREAKPOINT: 1024px (típico de iPads em landscape e abaixo)
+═══════════════════════════════════════════════════════════════════════════════ */
+ @media (max-width: 1024px) {
+     .serenity-arrow {
+         width: 45px;
+         height: 45px;
+         padding: 0.8rem 1rem;
+         font-size: 1rem;
+     }
+ 
+     .serenity-arrow-prev {
+         left: 1rem;
+     }
+ 
+     .serenity-arrow-next {
+         right: 1rem;
+     }
+ 
+     .serenity-dots {
+         bottom: 1.5rem;
+     }
+ }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   RESPONSIVIDADE - MOBILE (max-width: 768px)
+   
+   PURPOSE: Ajustes para smartphones
+   
+   DESCRIPTION:
+   - OCULTA setas completamente (!important para sobrescrever JS inline styles)
+   - Navegação apenas por touch/swipe em mobile
+   - Reduz espaçamento entre dots (0.8rem)
+   - Dots um pouco menores (10x10px)
+   - Aproxima dots ainda mais da borda (1rem)
+   
+   BREAKPOINT: 768px (típico de smartphones em landscape e abaixo)
+═══════════════════════════════════════════════════════════════════════════════ */
+ @media (max-width: 768px) {
+     .serenity-arrow {
+         display: none !important;
+     }
+ 
+     .serenity-dots {
+         bottom: 1rem;
+         gap: 0.8rem;
+     }
+ 
+     .serenity-dot {
+         width: 10px;
+         height: 10px;
+     }
+ }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   RESPONSIVIDADE - MOBILE SMALL (max-width: 480px)
+   
+   PURPOSE: Ajustes para smartphones pequenos
+   
+   DESCRIPTION:
+   - Reduz ainda mais gap entre dots (0.6rem)
+   - Reduz padding do container de dots
+   - Dots menores (8x8px) para caber confortavelmente
+   
+   BREAKPOINT: 480px (smartphones pequenos)
+═══════════════════════════════════════════════════════════════════════════════ */
+ @media (max-width: 480px) {
+     .serenity-dots {
+         gap: 0.6rem;
+         padding: 0.4rem 0.8rem;
+     }
+ 
+     .serenity-dot {
+         width: 8px;
+         height: 8px;
+     }
+ }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   ANIMAÇÃO AUXILIAR - SLIDE IN LEFT
+   
+   PURPOSE: Keyframe para slides entrando pela esquerda
+   
+   DESCRIPTION:
+   - Estado inicial: opacity 0, translateX(-100px)
+   - Estado final: opacity 1, translateX(0)
+   
+   USAGE: Pode ser aplicado via animation CSS para customizações
+═══════════════════════════════════════════════════════════════════════════════ */
+ @keyframes serenity-slide-in-left {
+     from {
+         opacity: 0;
+         transform: translateX(-100px);
+     }
+     to {
+         opacity: 1;
+         transform: translateX(0);
+     }
+ }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   ANIMAÇÃO AUXILIAR - SLIDE IN RIGHT
+   
+   PURPOSE: Keyframe para slides entrando pela direita
+   
+   DESCRIPTION:
+   - Estado inicial: opacity 0, translateX(100px)
+   - Estado final: opacity 1, translateX(0)
+   
+   USAGE: Pode ser aplicado via animation CSS para customizações
+═══════════════════════════════════════════════════════════════════════════════ */
+ @keyframes serenity-slide-in-right {
+     from {
+         opacity: 0;
+         transform: translateX(100px);
+     }
+     to {
+         opacity: 1;
+         transform: translateX(0);
+     }
+ }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   ANIMAÇÃO AUXILIAR - FADE IN
+   
+   PURPOSE: Keyframe para fade in simples
+   
+   DESCRIPTION:
+   - Estado inicial: opacity 0
+   - Estado final: opacity 1
+   
+   USAGE: Pode ser aplicado via animation CSS para customizações
+═══════════════════════════════════════════════════════════════════════════════ */
+ @keyframes serenity-fade-in {
+     from {
+         opacity: 0;
+     }
+     to {
+         opacity: 1;
+     }
+ }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   ANIMAÇÃO AUXILIAR - SCALE IN
+   
+   PURPOSE: Keyframe para entrada com scale
+   
+   DESCRIPTION:
+   - Estado inicial: opacity 0, scale(0.8)
+   - Estado final: opacity 1, scale(1)
+   
+   USAGE: Pode ser aplicado via animation CSS para customizações
+═══════════════════════════════════════════════════════════════════════════════ */
+ @keyframes serenity-scale-in {
+     from {
+         opacity: 0;
+         transform: scale(0.8);
+     }
+     to {
+         opacity: 1;
+         transform: scale(1);
+     }
+ }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   UTILITY - NO SELECT
+   
+   PURPOSE: Previne seleção de texto indesejada
+   
+   DESCRIPTION:
+   - Desabilita user-select em todos os navegadores
+   - Útil para elementos de UI como setas e dots que não devem ser selecionáveis
+   
+   USAGE: Aplicar a elementos de controle para melhorar UX
+═══════════════════════════════════════════════════════════════════════════════ */
+ .serenity-no-select {
+     user-select: none;
+     -webkit-user-select: none;
+     -moz-user-select: none;
+     -ms-user-select: none;
+ }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   UTILITY - DRAGGING
+   
+   PURPOSE: Estado visual durante drag/swipe
+   
+   DESCRIPTION:
+   - Cursor grabbing para feedback visual de que está arrastando
+   - !important para sobrescrever cursor padrão
+   
+   USAGE: Aplicar durante eventos touchmove ou mousemove
+═══════════════════════════════════════════════════════════════════════════════ */
+ .serenity-dragging {cursor: grabbing !important;}
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   ESTADO - LOADING
+   
+   PURPOSE: Estado visual durante carregamento
+   
+   DESCRIPTION:
+   - Desabilita pointer-events para prevenir interações
+   - Reduz opacity para indicar estado inativo
+   - ::after cria overlay com spinner animado
+   
+   USAGE: Aplicar ao container durante operações assíncronas
+═══════════════════════════════════════════════════════════════════════════════ */
+ .serenity-loading {
+     pointer-events: none;
+     opacity: 0.6;
+ }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   SPINNER - LOADING STATE
+   
+   PURPOSE: Indicador visual de carregamento
+   
+   DESCRIPTION:
+   - Pseudo-elemento posicionado no centro (translate -50%, -50%)
+   - Border circular com top-color diferente para criar efeito de spinner
+   - Animação serenity-spin infinita
+   
+   USAGE: Gerado automaticamente quando .serenity-loading está aplicado
+═══════════════════════════════════════════════════════════════════════════════ */
+ .serenity-loading::after {
+     content: '';
+     position: absolute;
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+     width: 50px;
+     height: 50px;
+     border: 4px solid rgba(255, 255, 255, 0.3);
+     border-top-color: white;
+     border-radius: 50%;
+     animation: serenity-spin 1s linear infinite;
+ }
+
+/* ═══════════════════════════════════════════════════════════════════════════════
+   ANIMAÇÃO - SPINNER ROTATION
+   
+   PURPOSE: Rotação contínua do spinner de loading
+   
+   DESCRIPTION:
+   - Rotação completa 360deg
+   - Transform mantém translate(-50%, -50%) para centralização
+   - Linear timing para rotação constante
+   
+   USAGE: Aplicado automaticamente ao spinner em .serenity-loading::after
+═══════════════════════════════════════════════════════════════════════════════ */
+ @keyframes serenity-spin {
+     to {
+         transform: translate(-50%, -50%) rotate(360deg);
+     }
+ }
